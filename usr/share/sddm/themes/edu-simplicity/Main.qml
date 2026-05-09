@@ -29,15 +29,10 @@ Rectangle {
         }
     }
     
-    Background {
+    Image {
         anchors.fill: parent
-        source: config.background
+        source: "images/background.jpg"
         fillMode: Image.PreserveAspectCrop
-        onStatusChanged: {
-            if (status == Image.Error && source != config.defaultBackground) {
-                source = config.defaultBackground
-            }
-        }
     }
 
     Column {
