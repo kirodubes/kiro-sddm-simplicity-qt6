@@ -1,40 +1,59 @@
 # CHANGELOG
 
-## 2026.05.10
+## 2026.05.10 (session 2)
 
 ### What Changed
-Replaced the broken background rendering with a proper multi-monitor implementation borrowed from the KDE breeze SDDM theme. Root element changed from `Rectangle` to `Item`. Background now uses `Repeater { model: screenModel }` so each physical display gets its own background instance, matching the breeze pattern. Work done on branch `breeze-background`.
+
+Made the theme compatible with both Qt5.15 (`sddm-greeter`, X11) and Qt6 (`sddm-greeter-qt6`, Wayland). Switched from unversioned imports to `2.15` versioned imports — Qt5.15 requires a version number and Qt6 accepts versioned 2.x imports via its compatibility layer. Updated PKGBUILD depends from `qt6-declarative` to `sddm`.
 
 ### Technical Details
+
+- `import QtQuick` (unversioned) is rejected by the Qt5.15 `sddm-greeter` even though Qt 5.15 theoretically supports it — `import QtQuick 2.15` satisfies both greeters
+- Qt6 accepts `import QtQuick 2.x` via a compatibility shim that maps them to the current Qt6 version
+- `depends=('sddm')` is correct for an SDDM theme — Qt is a transitive dependency through the greeter binary
+- Tested with both `sddm-greeter --test-mode` and `sddm-greeter-qt6 --test-mode`
+
+### Files Modified
+
+- `usr/share/sddm/themes/edu-simplicity/Main.qml`
+- `usr/share/sddm/themes/edu-simplicity/SimpleControls/Button.qml`
+- `usr/share/sddm/themes/edu-simplicity/SimpleControls/ComboBox.qml`
+- `usr/share/sddm/themes/edu-simplicity/SceneBackground.qml`
+
+## 2026.05.10 (session 1)
+
+### What Changed
+
+Replaced the broken background rendering with a proper multi-monitor implementation borrowed from the KDE breeze SDDM theme. Root element changed from `Rectangle` to `Item`. Background now uses `Repeater { model: screenModel }` so each physical display gets its own background instance. Work done on branch `breeze-background`.
+
+### Technical Details
+
 - Copied `Background.qml` from `/usr/share/sddm/themes/breeze/` — pure QtQuick, no KDE/Plasma dependencies
-- Renamed it to `SceneBackground.qml` to avoid name collision with `SddmComponents 2.0`'s own `Background` type (which would shadow the local file and cause "non-existent property sceneBackgroundImage" errors)
-- Background image path passed via `Qt.resolvedUrl("images/background.jpg")` so the URL is resolved relative to `Main.qml`, not `SceneBackground.qml`
+- Renamed to `SceneBackground.qml` to avoid name collision with `SddmComponents 2.0`'s own `Background` type
+- Background image path passed via `Qt.resolvedUrl("images/background.jpg")` so the URL resolves relative to `Main.qml`
 - `SddmComponents 2.0` import kept for `TextConstants` only
 - PKGBUILD unchanged — `cp -r usr/` picks up `SceneBackground.qml` automatically
 
 ### Files Modified
+
 - `usr/share/sddm/themes/edu-simplicity/Main.qml`
 - `usr/share/sddm/themes/edu-simplicity/SceneBackground.qml` (new)
-
-### Outstanding
-- Real hardware "library import requires a version" error: still undiagnosed — need `ldd /usr/bin/sddm-greeter* | grep libQt` on that machine to confirm Qt version
 
 ## 2026.05.09
 
 ### What Changed
-Ported the theme from Qt5 to Qt6. The original QML used versioned imports (`QtQuick 2.12`, `QtQuick.Controls 2.12`) which fail on Qt6 SDDM builds. Replaced with unversioned imports. Also fixed the background image loading — the `SddmComponents` `Background` component resolves relative paths against its own location (`/usr/lib/qt6/qml/SddmComponents/`), not the theme directory, causing it to always fail. Replaced with a plain `Image` element using a theme-relative path.
+
+Ported the theme from Qt5 to Qt6. The original QML used versioned imports (`QtQuick 2.12`, `QtQuick.Controls 2.12`) which fail on Qt6 SDDM builds. Replaced with unversioned imports. Also fixed the background image loading — the `SddmComponents` `Background` component resolves relative paths against its own location, not the theme directory. Replaced with a plain `Image` element using a theme-relative path.
 
 ### Technical Details
-- Qt6 QML modules use unversioned imports (`import QtQuick` with no version suffix); versioned imports are Qt5-only
-- `SddmComponents.Background { source: config.background }` silently fails in Qt6 because the relative path `images/background.jpg` is resolved against Background.qml's own directory, not the theme root. Switching to `Image { source: "images/background.jpg" }` in Main.qml resolves correctly because QML resolves relative URLs against the file that references them
+
+- Qt6 QML modules use unversioned imports; versioned imports are Qt5-only
+- `SddmComponents.Background { source: config.background }` silently fails in Qt6 because the relative path resolves against Background.qml's own directory, not the theme root
 - `depends` in PKGBUILD updated from `qt5-quickcontrols2 qt5-quickcontrols` to `qt6-declarative`
 - Removed duplicate `makedepends=('git')` line from PKGBUILD
 
 ### Files Modified
+
 - `usr/share/sddm/themes/edu-simplicity/Main.qml`
 - `usr/share/sddm/themes/edu-simplicity/SimpleControls/Button.qml`
 - `usr/share/sddm/themes/edu-simplicity/SimpleControls/ComboBox.qml`
-
-### Outstanding
-- Black screen in VirtualBox: Qt6 RHI rendering doesn't work with VirtualBox virtual GPU — not a theme bug, VirtualBox limitation
-- "Library import requires a version" on real hardware: real hardware may be running Qt5 SDDM; needs `ldd /usr/bin/sddm-greeter* | grep libQt` to confirm Qt version before diagnosing further
