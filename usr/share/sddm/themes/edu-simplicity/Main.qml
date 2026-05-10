@@ -3,16 +3,27 @@ import QtQuick.Controls
 import SddmComponents 2.0
 import "SimpleControls" as Simple
 
-Rectangle {
+Item {
+    id: root
 
     readonly property color backgroundColor: Qt.rgba(0, 0, 0, 0.4)
     readonly property color hoverBackgroundColor: Qt.rgba(0, 0, 0, 0.6)
-    
-    width: 640
-    height: 480
-    
+
+    width: 1920
+    height: 1080
+
     LayoutMirroring.enabled: Qt.locale().textDirection == Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
+
+    Repeater {
+        model: screenModel
+        SceneBackground {
+            x: geometry.x; y: geometry.y
+            width: geometry.width; height: geometry.height
+            sceneBackgroundType: "image"
+            sceneBackgroundImage: Qt.resolvedUrl("images/background.jpg")
+        }
+    }
 
     TextConstants { id: textConstants }
     
@@ -29,12 +40,6 @@ Rectangle {
         }
     }
     
-    Image {
-        anchors.fill: parent
-        source: "images/background.jpg"
-        fillMode: Image.PreserveAspectCrop
-    }
-
     Column {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter

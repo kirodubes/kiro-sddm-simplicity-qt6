@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-An SDDM login screen theme named **edu-simplicity**, forked/derived from the upstream `arcolinux-simplicity` theme (original author: Gabriel Ibáñez). Written in QML (Qt Quick 2.12 / QtQuick.Controls 2.12).
+An SDDM login screen theme named **edu-simplicity**, forked/derived from the upstream `arcolinux-simplicity` theme (original author: Gabriel Ibáñez). Written in QML targeting **Qt6** (unversioned imports — requires Qt6 SDDM).
 
 ## Install path
 
@@ -19,14 +19,16 @@ Theme lands at `/usr/share/sddm/themes/edu-simplicity/`.
 ## Test without rebooting
 
 ```bash
-sddm-greeter --test-mode --theme /usr/share/sddm/themes/edu-simplicity
+sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/edu-simplicity
 ```
 
 Or point directly at the repo while developing:
 
 ```bash
-sddm-greeter --test-mode --theme /home/erik/EDU/edu-sddm-simplicity/usr/share/sddm/themes/edu-simplicity
+sddm-greeter-qt6 --test-mode --theme /home/erik/EDU/edu-sddm-simplicity-qt6/usr/share/sddm/themes/edu-simplicity
 ```
+
+Note: test mode requires a running X11/Wayland session — does not work from TTY.
 
 ## Architecture
 
