@@ -1,5 +1,39 @@
 # CHANGELOG
 
+## 2026.05.11
+
+### What Changed
+
+Dropped Qt5 compatibility — theme is now Qt6-only. Reverted all imports back to unversioned Qt6 style after the dual-version approach caused failures on PrismLinux (Qt5 SDDM greeter). PKGBUILD depends should be `qt6-declarative` (not `sddm`).
+
+### Technical Details
+
+- Unversioned imports (`import QtQuick`, `import QtQuick.Controls`) are rejected by Qt5.15 `sddm-greeter`, which is the desired behavior — Qt6-only theme, Qt6-only greeter
+- `SddmComponents 2.0` import unchanged — that version number is an SDDM module version, unrelated to Qt versioning
+
+### Files Modified
+
+- `usr/share/sddm/themes/edu-simplicity/Main.qml`
+- `usr/share/sddm/themes/edu-simplicity/SimpleControls/Button.qml`
+- `usr/share/sddm/themes/edu-simplicity/SimpleControls/ComboBox.qml`
+- `usr/share/sddm/themes/edu-simplicity/SceneBackground.qml`
+
+## 2026.05.10 (session 3)
+
+### What Changed
+
+Confirmed the theme works on real hardware under X11 SDDM (`sddm-greeter`, Qt5.15). Merged `breeze-background` branch into master. Identified that since the theme now works with both Qt5.15 and Qt6 greeters, merging back into the original `edu-sddm-simplicity` repo is worth considering next session.
+
+### Technical Details
+
+- Deployed with `sudo cp -r /home/erik/EDU/edu-sddm-simplicity-qt6/usr/ /` — full path required, running from wrong dir was the earlier failure
+- Fast-forward merge from `breeze-background` to master; origin/master already up to date
+- Theme now confirmed working: X11 Qt5.15 greeter on dev machine, both test-mode greeters verified
+
+### Files Modified
+
+None — merge and deployment only.
+
 ## 2026.05.10 (session 2)
 
 ### What Changed

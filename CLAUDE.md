@@ -69,6 +69,14 @@ All controls share the same palette — edit `Main.qml` properties to retheme gl
 
 `sddm.login(user, password, sessionIndex)`, `sddm.suspend()`, `sddm.reboot()`, `sddm.powerOff()`, `sddm.hibernate()`, `sddm.canSuspend`, `sddm.canHibernate`, `sddm.canReboot`, `sddm.canPowerOff`. Models: `userModel`, `sessionModel`.
 
+## Current state (2026.05.11)
+
+Theme is **Qt6-only**. All imports are unversioned (`import QtQuick`, `import QtQuick.Controls`) — Qt5 greeters will reject them. This was an intentional decision: the theme failed on PrismLinux (Qt5 SDDM) and the compatibility shim was dropped. Key files: `Main.qml` (root `Item`, `Repeater+screenModel` background), `SceneBackground.qml` (breeze-derived, pure QtQuick).
+
+PKGBUILD depends: `qt6-declarative`
+
+Next: no open items.
+
 ## Git helpers
 
 - `up.sh` — stages everything, commits with message "update", pushes to origin
