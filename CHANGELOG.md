@@ -10,6 +10,10 @@ Dropped Qt5 compatibility — theme is now Qt6-only. Reverted all imports back t
 
 - Unversioned imports (`import QtQuick`, `import QtQuick.Controls`) are rejected by Qt5.15 `sddm-greeter`, which is the desired behavior — Qt6-only theme, Qt6-only greeter
 - `SddmComponents 2.0` import unchanged — that version number is an SDDM module version, unrelated to Qt versioning
+- PrismLinux (tested in VirtualBox) uses `sddm-greeter` (Qt5), confirmed via journalctl: `sddm-greeter[PID]` vs `sddm-greeter-qt6[PID]`
+- Black screen in VirtualBox is caused by MESA ZINK GPU initialization failure (`VK_ERROR_INITIALIZATION_FAILED`, `failed to create dri2 screen`), not theme code — install VirtualBox Guest Additions or switch graphics controller to VBoxSVGA to fix
+- layer-shell errors in journalctl are unrelated to theme rendering — appear on both working and broken configurations
+- Decision: keep both repos separate (`edu-sddm-simplicity` for Qt5, `edu-sddm-simplicity-qt6` for Qt6-only)
 
 ### Files Modified
 
