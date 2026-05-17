@@ -32,9 +32,10 @@ Note: test mode requires a running X11/Wayland session — does not work from TT
 
 ## Architecture
 
-```
+```text
 usr/share/sddm/themes/edu-simplicity/
 ├── Main.qml              # Root component — layout, SDDM signal handlers, timer
+├── SceneBackground.qml   # Per-screen background (breeze-derived, pure QtQuick)
 ├── theme.conf            # Single key: background=images/background.jpg
 ├── metadata.desktop      # Theme metadata (name, version, entry point)
 ├── SimpleControls/
@@ -47,6 +48,7 @@ usr/share/sddm/themes/edu-simplicity/
 ```
 
 **Main.qml** is the only entry point. It:
+
 - Connects to SDDM signals (`onLoginFailed` clears password, shows error rect)
 - Lays out: session picker (top-left) → user+password+login column (center) → power buttons (bottom-center) → clock (top-right)
 - Drives the clock with a 500ms repeating `Timer`
@@ -58,7 +60,7 @@ usr/share/sddm/themes/edu-simplicity/
 All controls share the same palette — edit `Main.qml` properties to retheme globally:
 
 | Property | Value |
-|---|---|
+| --- | --- |
 | `backgroundColor` | `Qt.rgba(0,0,0,0.4)` |
 | `hoverBackgroundColor` | `Qt.rgba(0,0,0,0.6)` |
 | Border | `Qt.rgba(1,1,1,0.4)` |

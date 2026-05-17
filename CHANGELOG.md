@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 2026.05.12
+
+### What Changed
+
+Session focused on verification and housekeeping. Created CLAUDE.md for the original `edu-sddm-simplicity` repo via `/init`. Confirmed the qt6 folder is already correctly set up for Qt6/Wayland. Fixed `metadata.desktop` — updated `Name`, `Author`, and `Theme-Id` from upstream arcolinux values to `edu-simplicity`.
+
+### Technical Details
+
+- `metadata.desktop` `Theme-Id` was still `arcolinux-simplicity` — SDDM uses this ID internally, so it must match the theme folder name `edu-simplicity`
+- The qt6 folder had all correct Qt6 changes already in place: unversioned imports, root `Item`, `Repeater+screenModel+SceneBackground` background, `qt6-declarative` depends
+- Root cause of Wayland/Qt6 failure: Qt6 greeter (`sddm-greeter-qt6`) rejects versioned `QtQuick 2.x` imports; unversioned `import QtQuick` is required
+
+### Files Modified
+
+- `usr/share/sddm/themes/edu-simplicity/metadata.desktop`
+- `CLAUDE.md` (created)
+
 ## 2026.05.11
 
 ### What Changed
