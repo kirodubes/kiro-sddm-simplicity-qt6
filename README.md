@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="kiro.jpg" alt="Kiro" width="220" />
+</p>
+
 # edu-sddm-simplicity-qt6
 
 Qt 6 port of the [edu-sddm-simplicity](https://github.com/erikdubois/edu-sddm-simplicity) SDDM theme — clean, minimal login screen, compatible with SDDM builds linked against Qt 6. Part of the `~/EDU/` learning series.
