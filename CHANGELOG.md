@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 2026.06.12
+
+### What Changed
+
+Mirrored the 2026-06-12 accessibility push from the primary `kiro-sddm-simplicity` (Qt5) repo so the two themes stay in sync:
+
+1. **Low-vision readability** — bumped all greeter text to a larger, consistent size (the font change had only landed in the qt5 repo until now).
+2. **On-screen keyboard** — added a Qt VirtualKeyboard `InputPanel` raised by a new **Keyboard** toggle button in the bottom power row, for users without a physical keyboard.
+
+### Technical Details
+
+- Added `readonly property int fontSize: 16` on root and `font.pointSize: root.fontSize` on every control (user picker, password field, Login button, error label, power buttons, session picker, clock). Controls grow to fit via their `implicitHeight: 30` floor.
+- Added `import QtQuick.VirtualKeyboard` (unversioned — consistent with this repo's Qt6 import style), a `property bool keyboardVisible`, and a bottom-anchored `InputPanel` whose `y` is gated on `keyboardVisible` (toggle-only, never auto-shown on focus).
+- When raised, the login column lifts above the keyboard via `anchors.verticalCenterOffset: -(inputPanel.height / 2)` so the password field stays visible; scales with screen resolution.
+- Password field sets `placeholderTextColor: "white"` for a legible hint.
+- Theme body is now identical to the qt5 repo apart from the unversioned imports.
+
+### Files Modified
+
+- `usr/share/sddm/themes/edu-simplicity/Main.qml`
+
 ## 2026.05.12
 
 ### What Changed

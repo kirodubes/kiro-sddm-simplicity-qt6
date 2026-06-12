@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.VirtualKeyboard
 import SddmComponents 2.0
 import "SimpleControls" as Simple
 
@@ -8,6 +9,13 @@ Item {
 
     readonly property color backgroundColor: Qt.rgba(0, 0, 0, 0.4)
     readonly property color hoverBackgroundColor: Qt.rgba(0, 0, 0, 0.6)
+
+    // Base font size for all controls — bumped for low-vision readability.
+    // Backgrounds use implicitHeight: 30 as a floor, so controls grow to fit.
+    readonly property int fontSize: 16
+
+    // Toggle-driven on-screen keyboard (accessibility) — see InputPanel below.
+    property bool keyboardVisible: false
 
     width: 1920
     height: 1080
@@ -26,23 +34,27 @@ Item {
     }
 
     TextConstants { id: textConstants }
-    
+
     Connections {
         target: sddm
-        
+
         function onLoginSucceeded() {}
-        
+
         function onLoginFailed() {
             pw_entry.clear()
             pw_entry.focus = true
-            
+
             errorMsgContainer.visible = true
         }
     }
-    
+
     Column {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
+        // Lift the login fields into the space above the keyboard when it is
+        // raised, so the password field is never hidden behind it.
+        anchors.verticalCenterOffset: root.keyboardVisible ? -(inputPanel.height / 2) : 0
+        Behavior on anchors.verticalCenterOffset { NumberAnimation { duration: 200; easing.type: Easing.InOutQuad } }
         spacing: 10
 
         Simple.ComboBox {
@@ -50,6 +62,7 @@ Item {
             model: userModel
             currentIndex: userModel.lastIndex
             textRole: "realName"
+            font.pointSize: root.fontSize
             width: 250
             KeyNavigation.backtab: session
             KeyNavigation.tab: pw_entry
@@ -60,7 +73,9 @@ Item {
             color: "white"
             echoMode: TextInput.Password
             focus: true
+            font.pointSize: root.fontSize
             placeholderText: textConstants.promptPassword
+            placeholderTextColor: "white"
             width: 250
             background: Rectangle {
                 implicitWidth: 100
@@ -77,12 +92,13 @@ Item {
         Simple.Button {
             id: loginButton
             text: textConstants.login
+            font.pointSize: root.fontSize
             width: 250
             onClicked: sddm.login(user_entry.getValue(), pw_entry.text, session.currentIndex)
             KeyNavigation.backtab: pw_entry
             KeyNavigation.tab: suspend
         }
-        
+
         Rectangle {
             id: errorMsgContainer
             width: 250
@@ -91,12 +107,13 @@ Item {
             clip: true
             visible: false
             radius: 3
-            
+
             Label {
                 anchors.centerIn: parent
                 text: textConstants.loginFailed
                 width: 240
                 color: "white"
+                font.pointSize: root.fontSize
                 font.bold: true
                 elide: Qt.locale().textDirection == Qt.RightToLeft ? Text.ElideLeft : Text.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
@@ -113,10 +130,11 @@ Item {
         }
 
         spacing: 5
-        
+
         Simple.Button {
             id: suspend
             text: textConstants.suspend
+            font.pointSize: root.fontSize
             onClicked: sddm.suspend()
             visible: sddm.canSuspend
             KeyNavigation.backtab: loginButton
@@ -126,26 +144,37 @@ Item {
         Simple.Button {
             id: hibernate
             text: textConstants.hibernate
+            font.pointSize: root.fontSize
             onClicked: sddm.hibernate()
             visible: sddm.canHibernate
             KeyNavigation.backtab: suspend
             KeyNavigation.tab: restart
         }
-        
+
         Simple.Button {
             id: restart
             text: textConstants.reboot
+            font.pointSize: root.fontSize
             onClicked: sddm.reboot()
             visible: sddm.canReboot
             KeyNavigation.backtab: suspend; KeyNavigation.tab: shutdown
         }
-        
+
         Simple.Button {
             id: shutdown
             text: textConstants.shutdown
+            font.pointSize: root.fontSize
             onClicked: sddm.powerOff()
             visible: sddm.canPowerOff
-            KeyNavigation.backtab: restart; KeyNavigation.tab: session
+            KeyNavigation.backtab: restart; KeyNavigation.tab: keyboardToggle
+        }
+
+        Simple.Button {
+            id: keyboardToggle
+            text: "Keyboard"
+            font.pointSize: root.fontSize
+            onClicked: root.keyboardVisible = !root.keyboardVisible
+            KeyNavigation.backtab: shutdown; KeyNavigation.tab: session
         }
     }
 
@@ -160,9 +189,10 @@ Item {
         currentIndex: sessionModel.lastIndex
         model: sessionModel
         textRole: "name"
+        font.pointSize: root.fontSize
         width: 200
         visible: sessionModel.rowCount() > 1
-        KeyNavigation.backtab: shutdown
+        KeyNavigation.backtab: keyboardToggle
         KeyNavigation.tab: user_entry
     }
 
@@ -185,6 +215,7 @@ Item {
             anchors.centerIn: parent
             text: Qt.formatDateTime(new Date(), "HH:mm")
             color: "white"
+            font.pointSize: root.fontSize
             horizontalAlignment: Text.AlignHCenter
         }
     }
@@ -197,5 +228,16 @@ Item {
         onTriggered: {
             timelb.text = Qt.formatDateTime(new Date(), "HH:mm")
         }
+    }
+
+    // On-screen keyboard — slides up from the bottom only when the user clicks
+    // the Keyboard button (root.keyboardVisible), never auto-shown on focus.
+    InputPanel {
+        id: inputPanel
+        z: 99
+        anchors.left: parent.left
+        anchors.right: parent.right
+        y: root.keyboardVisible ? parent.height - height : parent.height
+        Behavior on y { NumberAnimation { duration: 200; easing.type: Easing.InOutQuad } }
     }
 }
