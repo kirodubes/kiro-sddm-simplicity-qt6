@@ -2,9 +2,9 @@
   <img src="kiro.jpg" alt="Kiro" width="220" />
 </p>
 
-# edu-sddm-simplicity-qt6
+# kiro-sddm-simplicity-qt6
 
-Qt 6 port of the [edu-sddm-simplicity](https://github.com/erikdubois/edu-sddm-simplicity) SDDM theme — clean, minimal login screen, compatible with SDDM builds linked against Qt 6. Part of the `~/EDU/` learning series.
+Qt 6 port of the [kiro-sddm-simplicity](https://github.com/kirodubes/kiro-sddm-simplicity) SDDM theme — clean, minimal login screen, compatible with SDDM builds linked against Qt 6. Part of the `~/EDU/` learning series.
 
 ## What's in this repo
 
@@ -13,7 +13,7 @@ Qt 6 port of the [edu-sddm-simplicity](https://github.com/erikdubois/edu-sddm-si
 
 ## Companion variant
 
-- [edu-sddm-simplicity](https://github.com/erikdubois/edu-sddm-simplicity) — Qt 5 / legacy version of the same theme.
+- [kiro-sddm-simplicity](https://github.com/kirodubes/kiro-sddm-simplicity) — Qt 5 / legacy version of the same theme.
 
 ## Installation
 
@@ -27,7 +27,7 @@ Server = https://erikdubois.github.io/$repo/$arch
 
 ```bash
 sudo pacman -Syu
-sudo pacman -S edu-sddm-simplicity-qt6
+sudo pacman -S kiro-sddm-simplicity-qt6
 ```
 
 You'll also need a Qt 6-linked SDDM:
@@ -40,8 +40,8 @@ sudo systemctl enable sddm.service
 ### Manual
 
 ```bash
-git clone https://github.com/erikdubois/edu-sddm-simplicity-qt6.git
-cd edu-sddm-simplicity-qt6
+git clone https://github.com/kirodubes/kiro-sddm-simplicity-qt6.git
+cd kiro-sddm-simplicity-qt6
 sudo cp -r usr/share/sddm/themes/. /usr/share/sddm/themes/
 ```
 
