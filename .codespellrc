@@ -1,0 +1,3 @@
+[codespell]
+# ZINK is the Mesa Vulkan-on-GL driver name, not a typo
+ignore-words-list = zink

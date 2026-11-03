@@ -33,7 +33,6 @@ Item {
         }
     }
 
-    TextConstants { id: textConstants }
 
     Connections {
         target: sddm
@@ -74,7 +73,7 @@ Item {
             echoMode: TextInput.Password
             focus: true
             font.pointSize: root.fontSize
-            placeholderText: textConstants.promptPassword
+            placeholderText: qsTr("Enter your password")
             placeholderTextColor: "white"
             width: 250
             background: Rectangle {
@@ -91,7 +90,7 @@ Item {
 
         Simple.Button {
             id: loginButton
-            text: textConstants.login
+            text: qsTr("Login")
             font.pointSize: root.fontSize
             width: 250
             onClicked: sddm.login(user_entry.getValue(), pw_entry.text, session.currentIndex)
@@ -110,7 +109,7 @@ Item {
 
             Label {
                 anchors.centerIn: parent
-                text: textConstants.loginFailed
+                text: qsTr("Login failed")
                 width: 240
                 color: "white"
                 font.pointSize: root.fontSize
@@ -133,7 +132,7 @@ Item {
 
         Simple.Button {
             id: suspend
-            text: textConstants.suspend
+            text: qsTr("Suspend")
             font.pointSize: root.fontSize
             onClicked: sddm.suspend()
             visible: sddm.canSuspend
@@ -143,7 +142,7 @@ Item {
 
         Simple.Button {
             id: hibernate
-            text: textConstants.hibernate
+            text: qsTr("Hibernate")
             font.pointSize: root.fontSize
             onClicked: sddm.hibernate()
             visible: sddm.canHibernate
@@ -153,7 +152,7 @@ Item {
 
         Simple.Button {
             id: restart
-            text: textConstants.reboot
+            text: qsTr("Reboot")
             font.pointSize: root.fontSize
             onClicked: sddm.reboot()
             visible: sddm.canReboot
@@ -162,7 +161,7 @@ Item {
 
         Simple.Button {
             id: shutdown
-            text: textConstants.shutdown
+            text: qsTr("Shutdown")
             font.pointSize: root.fontSize
             onClicked: sddm.powerOff()
             visible: sddm.canPowerOff
@@ -171,7 +170,7 @@ Item {
 
         Simple.Button {
             id: keyboardToggle
-            text: "Keyboard"
+            text: qsTr("Keyboard")
             font.pointSize: root.fontSize
             onClicked: root.keyboardVisible = !root.keyboardVisible
             KeyNavigation.backtab: shutdown; KeyNavigation.tab: session
